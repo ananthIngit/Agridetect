@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.env
+
+# Model & Data
+*.pth
+data/
+
+# Node.js
+node_modules/
+dist/
+build/
+npm-debug.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
