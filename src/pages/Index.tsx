@@ -1,7 +1,11 @@
 import { Camera, MessageSquare, Leaf, Shield, Zap, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+<<<<<<< HEAD
 import { NavLink } from "../components/NavLink"; // FIXED: Using relative path to resolve build issues
+=======
+import { NavLink } from "@/components/NavLink";
+>>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
 
 const Index = () => {
   return (
@@ -163,4 +167,7 @@ const Index = () => {
 };
 
 export default Index;
+<<<<<<< HEAD
 ```eof
+=======
+>>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb

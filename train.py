@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+<<<<<<< HEAD
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 from torch.optim.lr_scheduler import StepLR
@@ -73,6 +74,44 @@ if __name__ == '__main__':
         num_classes = len(get_class_names(DATA_DIR))
         
         print(f"Dataset split: Train={train_size}, Validation={val_size}, Test={test_size}. Classes: {num_classes}")
+=======
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from utils.dataset_loader import PlantDataset, get_class_names
+from models.hybrid_model import HybridPlantNet
+
+# --- Configuration ---
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# IMPORTANT: Place your PlantVillage class folders (e.g., 'Tomato___Bacterial_spot') inside 'data/PlantVillage'
+DATA_DIR = "data/PlantVillage" 
+NUM_EPOCHS = 10
+BATCH_SIZE = 16
+LEARNING_RATE = 1e-4
+# ---------------------
+
+# --- Data Transformations ---
+train_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+])
+# ----------------------------
+
+# FIX: Wrap execution code in this block to prevent RuntimeError on Windows multiprocessing
+if __name__ == '__main__':
+    
+    # --- Data Loading ---
+    try:
+        # Use num_workers=0 if you continue to face PermissionError or multiprocessing issues on Windows.
+        # Otherwise, 4 is usually a good setting for performance.
+        NUM_WORKERS = 4 if DEVICE == "cuda" else 0
+        
+        dataset = PlantDataset(DATA_DIR, transform=train_transform)
+        num_classes = len(get_class_names(DATA_DIR))
+        train_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
+        
+        print(f"Dataset loaded: {len(dataset)} images, {num_classes} classes.")
+>>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
         
     except FileNotFoundError:
         print(f"ERROR: Data directory not found. Please ensure your dataset is at: {DATA_DIR}")
@@ -81,6 +120,7 @@ if __name__ == '__main__':
     # --- Model, Loss, Optimizer ---
     model = HybridPlantNet(num_classes).to(DEVICE)
     criterion = nn.CrossEntropyLoss()
+<<<<<<< HEAD
     optimizer = torch.optim.Adam(model.parameters(), lr=INITIAL_LR)
     
     # NEW: Learning Rate Scheduler (Decreases LR by 10% every 10 epochs)
@@ -96,6 +136,17 @@ if __name__ == '__main__':
         total_train_loss = 0
         
         # Training phase
+=======
+    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+
+    print(f"Starting training on {DEVICE} for {NUM_EPOCHS} epochs...")
+
+    # --- Training Loop ---
+    for epoch in range(NUM_EPOCHS):
+        model.train()
+        total_loss = 0
+        
+>>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
         for batch_idx, (imgs, labels) in enumerate(train_loader):
             imgs, labels = imgs.to(DEVICE), labels.to(DEVICE)
             
@@ -106,6 +157,7 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
             
+<<<<<<< HEAD
             total_train_loss += loss.item()
 
         scheduler.step() # Step the scheduler after the epoch
@@ -162,3 +214,13 @@ if __name__ == '__main__':
     # --- Save Model ---
     torch.save(model.state_dict(), "hybrid_model_final.pth")
     print(f"✅ Training complete. Final model saved to hybrid_model_final.pth!")
+=======
+            total_loss += loss.item()
+
+        print(f"Epoch {epoch+1}/{NUM_EPOCHS}: Loss = {total_loss/len(train_loader):.4f}")
+
+    # --- Save Model ---
+    MODEL_PATH = "hybrid_model.pth"
+    torch.save(model.state_dict(), MODEL_PATH)
+    print(f"✅ Model trained and saved to {MODEL_PATH}!")
+>>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
