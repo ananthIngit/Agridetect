@@ -1,8 +1,10 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from utils.dataset_loader import PlantDataset, get_class_names
-from models.hybrid_model import HybridPlantNet
+# Assuming utility functions are available
+from utils.dataset_loader import PlantDataset, get_class_names 
+# --- CORRECTED: Import CNNPlantNet instead of HybridPlantNet ---
+from models.hybrid_model import CNNPlantNet 
 import os
 
 # --- Metrics and Plotting ---
@@ -13,14 +15,18 @@ import numpy as np
 # --- Configuration ---
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DATA_DIR = "data/PlantVillage"
-MODEL_PATH = "hybrid_model.pth" # Your trained model
+# --- CORRECTED: Use the model path defined by train.py ---
+MODEL_PATH = "efficientnet_b0_final.pth" 
 BATCH_SIZE = 16
 # ---------------------
 
 # --- Validation Transform (Simple, no augmentations) ---
+# Standard transforms used for evaluation
 val_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
+    # Include normalization, as the model expects normalized input
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 # ----------------------------
 
@@ -29,16 +35,16 @@ if __name__ == '__main__':
     # --- 1. Load Class Names ---
     try:
         if not os.path.exists(DATA_DIR) or not os.listdir(DATA_DIR):
-             print(f"ERROR: Data directory not found or is empty at: {DATA_DIR}")
-             print("Please place your class folders (e.g., 'Tomato_healthy') inside 'data/PlantVillage'.")
-             exit()
-             
+            print(f"ERROR: Data directory not found or is empty at: {DATA_DIR}")
+            print("Please place your class folders (e.g., 'Tomato_healthy') inside 'data/PlantVillage'.")
+            exit()
+            
         class_names = get_class_names(DATA_DIR)
         num_classes = len(class_names)
         
         if num_classes == 0:
-             print(f"ERROR: No class folders found in {DATA_DIR}")
-             exit()
+            print(f"ERROR: No class folders found in {DATA_DIR}")
+            exit()
 
         print(f"Found {num_classes} classes: {class_names}")
 
@@ -53,14 +59,17 @@ if __name__ == '__main__':
             print("Please train the model first by running 'python train.py'")
             exit()
             
-        model = HybridPlantNet(num_classes).to(DEVICE)
+        # --- CORRECTED: Instantiate CNNPlantNet ---
+        model = CNNPlantNet(num_classes).to(DEVICE)
+        
         # Load the saved model weights
         model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
+        model.eval() # Ensure model is in evaluation mode right after loading
         print(f"✅ Model loaded successfully from {MODEL_PATH} on {DEVICE}")
         
     except Exception as e:
         print(f"❌ Error loading model: {e}")
-        print("This often means your 'hybrid_model.pth' was trained on a DIFFERENT number of classes")
+        print("This often means your model file was trained on a DIFFERENT number of classes")
         print(f"Model file might be expecting a different number than the {num_classes} classes found in your data folder.")
         exit()
 
@@ -106,21 +115,28 @@ if __name__ == '__main__':
     # --- 6. Plot Graph (Confusion Matrix) ---
     print("📊 Plotting Confusion Matrix...")
     try:
-        fig, ax = plt.subplots(figsize=(15, 15))
+        # Adjusting figure size for better visibility with 18 classes
+        fig, ax = plt.subplots(figsize=(18, 18))
+        
+        # 
         
         cm_display = ConfusionMatrixDisplay.from_predictions(
             all_labels, 
             all_preds, 
             labels=np.arange(len(class_names)),
             display_labels=class_names,
-            ax=ax
+            ax=ax,
+            cmap=plt.cm.Blues # Use a standard color map
         )
         
-        plt.xticks(rotation=90)
+        plt.xticks(rotation=75, ha='right') # Improved rotation for class names
+        plt.yticks(rotation=0)
         plt.tight_layout()
-        plt.title("Confusion Matrix")
+        plt.title("Confusion Matrix for Plant Disease Classification")
         
-        print("✅ Done! Showing graph...")
+        # Save the figure as well, so the user has a permanent record
+        plt.savefig("confusion_matrix.png")
+        print("✅ Done! Saved confusion matrix to confusion_matrix.png.")
         plt.show()
         
     except Exception as e:

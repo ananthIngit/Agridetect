@@ -61,13 +61,21 @@ export default {
       backgroundImage: {
         'hero-gradient': 'var(--hero-gradient)',
         'accent-gradient': 'var(--accent-gradient)',
+        'glow-gradient': 'var(--glow-gradient)',
       },
       boxShadow: {
         'card': 'var(--card-shadow)',
         'card-hover': 'var(--card-hover-shadow)',
+        'card-3d': 'var(--card-3d-shadow)',
+        'glow': 'var(--glow-shadow)',
       },
       transitionProperty: {
         'smooth': 'var(--transition-smooth)',
+        'bounce': 'var(--transition-bounce)',
+      },
+      perspective: {
+        '1000': '1000px',
+        '1500': '1500px',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -76,25 +84,42 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "glow": {
+          "0%, 100%": { opacity: "0.5" },
+          "50%": { opacity: "1" },
+        },
+        "rotate-3d": {
+          "0%": { transform: "rotateY(0deg)" },
+          "100%": { transform: "rotateY(360deg)" },
+        },
+        "tilt": {
+          "0%, 100%": { transform: "rotate(-2deg)" },
+          "50%": { transform: "rotate(2deg)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "float-slow": "float-slow 4s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite",
+        "rotate-3d": "rotate-3d 20s linear infinite",
+        "tilt": "tilt 2s ease-in-out infinite",
       },
     },
   },

@@ -38,12 +38,20 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
     
+    /* 3D & Depth Effects */
+    --perspective: 1000px;
     --hero-gradient: linear-gradient(135deg, hsl(140 65% 35%) 0%, hsl(160 60% 40%) 100%);
     --accent-gradient: linear-gradient(135deg, hsl(45 90% 55%) 0%, hsl(35 85% 50%) 100%);
-    --card-shadow: 0 4px 6px -1px hsl(140 65% 35% / 0.1), 0 2px 4px -2px hsl(140 65% 35% / 0.1);
-    --card-hover-shadow: 0 10px 15px -3px hsl(140 65% 35% / 0.15), 0 4px 6px -4px hsl(140 65% 35% / 0.1);
+    --glow-gradient: radial-gradient(circle at center, hsl(140 70% 50% / 0.3) 0%, transparent 70%);
+    
+    /* Enhanced Shadows for 3D Depth */
+    --card-shadow: 0 10px 30px -5px hsl(140 65% 35% / 0.2), 0 5px 15px -3px hsl(140 65% 35% / 0.15);
+    --card-hover-shadow: 0 25px 50px -12px hsl(140 65% 35% / 0.35), 0 15px 30px -8px hsl(140 65% 35% / 0.25);
+    --card-3d-shadow: 0 20px 40px -10px hsl(140 65% 35% / 0.3), 0 0 0 1px hsl(140 65% 35% / 0.05);
+    --glow-shadow: 0 0 30px hsl(140 70% 50% / 0.4), 0 0 60px hsl(140 70% 50% / 0.2);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 

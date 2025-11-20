@@ -1,47 +1,82 @@
 import torch
 import torch.nn as nn
-<<<<<<< HEAD
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
-from torch.optim.lr_scheduler import StepLR
-from utils.dataset_loader import PlantDataset, get_class_names
-from models.hybrid_model import HybridPlantNet
+from torch.optim.lr_scheduler import CosineAnnealingLR
+import timm
 from sklearn.metrics import classification_report
+import os
+import numpy as np
+
+# --- Project Imports ---
+from models.hybrid_model import CNNPlantNet 
+from utils.dataset_loader import PlantDataset, get_class_names 
 
 # --- Configuration ---
+MODEL_NAME = 'efficientnet_b0' 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DATA_DIR = "data/PlantVillage" 
-NUM_EPOCHS = 30
+DATA_DIR = "data/PlantVillage"
+NUM_EPOCHS = 50 
 BATCH_SIZE = 16
-INITIAL_LR = 5e-5
-# Define split ratios
+INITIAL_LR = 1e-6 
 TRAIN_RATIO = 0.8
 VAL_RATIO = 0.1
-# TEST_RATIO is calculated from the remainder
+CHECKPOINT_PATH = "cnnplantnet_best_checkpoint.pth" 
+WARMUP_EPOCHS = 5
 # ---------------------
 
-# --- Data Transformations (Optimized for Pre-trained Models) ---
-
-# Standard ImageNet normalization values (CRUCIAL for transfer learning)
+# --- Data Transformations ---
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
+IMAGE_SIZE = 224
 
 train_transform = transforms.Compose([
-    transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
+    transforms.RandomResizedCrop(IMAGE_SIZE, scale=(0.8, 1.0)),
     transforms.RandomRotation(15), 
     transforms.RandomHorizontalFlip(),
-    transforms.ColorJitter(brightness=0.1, contrast=0.1), 
+    transforms.ColorJitter(brightness=0.15, contrast=0.15), 
     transforms.ToTensor(),
     transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
-    transforms.RandomErasing(p=0.2, scale=(0.02, 0.1), value=0),
+    transforms.RandomErasing(p=0.5, scale=(0.05, 0.25), value=0), 
 ])
 
 test_val_transform = transforms.Compose([
-    transforms.Resize((224, 224)),
+    transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
     transforms.ToTensor(),
     transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
 ])
 # ----------------------------
+
+# --- Custom Warmup Function ---
+def adjust_lr(optimizer, epoch, warmup_epochs, initial_lr):
+    """Simple linear warmup for the first few epochs."""
+    if epoch < warmup_epochs:
+        lr = initial_lr * (epoch + 1) / warmup_epochs
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = lr
+
+# --- Utility for Dynamic Class Weight Calculation (Imbalance Fix) ---
+def get_class_counts_from_subset(subset, num_classes):
+    """
+    Counts the number of images per class within a PyTorch Subset object.
+    """
+    counts = [0] * num_classes
+    for idx in subset.indices:
+        label = subset.dataset.labels[idx] 
+        counts[label] += 1
+    return counts
+
+def calculate_inverse_frequency_weights(class_counts):
+    """Calculates weights for CrossEntropyLoss based on inverse class frequency."""
+    if not class_counts or all(c == 0 for c in class_counts):
+        return None
+    
+    counts = np.array(class_counts, dtype=np.float32)
+    inverse_freq = 1.0 / counts
+    weights = inverse_freq / np.sum(inverse_freq) * len(class_counts)
+    
+    # FIX APPLIED HERE: Changed np.float32 to torch.float32
+    return torch.tensor(weights, dtype=torch.float32)
 
 if __name__ == '__main__':
     
@@ -49,104 +84,68 @@ if __name__ == '__main__':
     try:
         NUM_WORKERS = 4 if DEVICE == "cuda" else 0
         
-        # 1. Load the entire dataset
         full_dataset = PlantDataset(DATA_DIR, transform=test_val_transform)
         
-        # 2. Calculate split sizes
         total_size = len(full_dataset)
+        if total_size == 0:
+            raise FileNotFoundError(f"No images found. Please ensure data is correctly structured at: {DATA_DIR}")
+
         train_size = int(TRAIN_RATIO * total_size)
         val_size = int(VAL_RATIO * total_size)
         test_size = total_size - train_size - val_size
         
-        # 3. Split the dataset randomly
         train_subset, val_subset, test_subset = random_split(
             full_dataset, [train_size, val_size, test_size]
         )
         
-        # Apply the heavy augmentations ONLY to the training subset
         train_subset.dataset.transform = train_transform
         
-        # 4. Create separate DataLoaders for each split
         train_loader = DataLoader(train_subset, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
         val_loader = DataLoader(val_subset, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS)
         test_loader = DataLoader(test_subset, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS)
 
-        num_classes = len(get_class_names(DATA_DIR))
+        class_names = get_class_names(DATA_DIR)
+        num_classes = len(class_names)
         
         print(f"Dataset split: Train={train_size}, Validation={val_size}, Test={test_size}. Classes: {num_classes}")
-=======
-from torch.utils.data import DataLoader
-from torchvision import transforms
-from utils.dataset_loader import PlantDataset, get_class_names
-from models.hybrid_model import HybridPlantNet
-
-# --- Configuration ---
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-# IMPORTANT: Place your PlantVillage class folders (e.g., 'Tomato___Bacterial_spot') inside 'data/PlantVillage'
-DATA_DIR = "data/PlantVillage" 
-NUM_EPOCHS = 10
-BATCH_SIZE = 16
-LEARNING_RATE = 1e-4
-# ---------------------
-
-# --- Data Transformations ---
-train_transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-])
-# ----------------------------
-
-# FIX: Wrap execution code in this block to prevent RuntimeError on Windows multiprocessing
-if __name__ == '__main__':
-    
-    # --- Data Loading ---
-    try:
-        # Use num_workers=0 if you continue to face PermissionError or multiprocessing issues on Windows.
-        # Otherwise, 4 is usually a good setting for performance.
-        NUM_WORKERS = 4 if DEVICE == "cuda" else 0
         
-        dataset = PlantDataset(DATA_DIR, transform=train_transform)
-        num_classes = len(get_class_names(DATA_DIR))
-        train_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
-        
-        print(f"Dataset loaded: {len(dataset)} images, {num_classes} classes.")
->>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
-        
-    except FileNotFoundError:
-        print(f"ERROR: Data directory not found. Please ensure your dataset is at: {DATA_DIR}")
+    except FileNotFoundError as e:
+        print(f"ERROR: Data loading failed. {e}")
         exit()
 
     # --- Model, Loss, Optimizer ---
-    model = HybridPlantNet(num_classes).to(DEVICE)
-    criterion = nn.CrossEntropyLoss()
-<<<<<<< HEAD
-    optimizer = torch.optim.Adam(model.parameters(), lr=INITIAL_LR)
+    model = CNNPlantNet(num_classes=num_classes).to(DEVICE)
+
+    # --- WEIGHTED LOSS IMPLEMENTATION (Active Imbalance Correction) ---
     
-    # NEW: Learning Rate Scheduler (Decreases LR by 10% every 10 epochs)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.1) 
+    train_class_counts = get_class_counts_from_subset(train_subset, num_classes)
+    print(f"Calculated Training Subset Class Counts: {train_class_counts}")
     
-    print(f"Starting training on {DEVICE} for {NUM_EPOCHS} epochs...")
+    CLASS_WEIGHTS = calculate_inverse_frequency_weights(train_class_counts)
+    
+    if CLASS_WEIGHTS is not None and len(CLASS_WEIGHTS) == num_classes:
+        print(f"✅ Using Dynamic Weighted Loss for {num_classes} classes.")
+        criterion = nn.CrossEntropyLoss(weight=CLASS_WEIGHTS.to(DEVICE))
+    else:
+        print(f"⚠️ Warning: Class counts could not be calculated/applied. Using unweighted loss.")
+        criterion = nn.CrossEntropyLoss()
+    # -------------------------------------------------------------------
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=INITIAL_LR, weight_decay=5e-4) 
+    scheduler = CosineAnnealingLR(optimizer, T_max=NUM_EPOCHS - WARMUP_EPOCHS, eta_min=1e-7)
+
+    print(f"Loaded {MODEL_NAME} CNN. Starting finetuning on {DEVICE} for {NUM_EPOCHS} epochs...")
 
     # --- Training Loop ---
     best_val_acc = 0.0
     
     for epoch in range(NUM_EPOCHS):
+        
+        adjust_lr(optimizer, epoch, WARMUP_EPOCHS, INITIAL_LR)
+        
         model.train()
         total_train_loss = 0
         
-        # Training phase
-=======
-    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
-
-    print(f"Starting training on {DEVICE} for {NUM_EPOCHS} epochs...")
-
-    # --- Training Loop ---
-    for epoch in range(NUM_EPOCHS):
-        model.train()
-        total_loss = 0
-        
->>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
         for batch_idx, (imgs, labels) in enumerate(train_loader):
             imgs, labels = imgs.to(DEVICE), labels.to(DEVICE)
             
@@ -157,33 +156,34 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
             
-<<<<<<< HEAD
             total_train_loss += loss.item()
 
-        scheduler.step() # Step the scheduler after the epoch
+        if epoch >= WARMUP_EPOCHS:
+            scheduler.step()
         
         # Validation phase
         model.eval()
         total_val_loss = 0
         correct = 0
+        
         with torch.no_grad():
             for imgs, labels in val_loader:
                 imgs, labels = imgs.to(DEVICE), labels.to(DEVICE)
                 outputs = model(imgs)
                 total_val_loss += criterion(outputs, labels).item()
                 
-                pred = outputs.argmax(dim=1, keepdim=True)
-                correct += pred.eq(labels.view_as(pred)).sum().item()
+                pred = outputs.argmax(dim=1)
+                correct += pred.eq(labels).sum().item()
 
         val_accuracy = 100. * correct / val_size
-        
-        print(f"Epoch {epoch+1}/{NUM_EPOCHS}: Train Loss = {total_train_loss/len(train_loader):.4f} | Val Loss = {total_val_loss/len(val_loader):.4f} | Val Acc: {val_accuracy:.2f}%")
+        current_lr = optimizer.param_groups[0]['lr']
 
-        # Save model if validation accuracy improved
+        print(f"Epoch {epoch+1}/{NUM_EPOCHS}: Train Loss = {total_train_loss/len(train_loader):.4f} | Val Loss = {total_val_loss/len(val_loader):.4f} | Val Acc: {val_accuracy:.2f}% (LR: {current_lr:.2e})")
+
         if val_accuracy > best_val_acc:
             best_val_acc = val_accuracy
-            torch.save(model.state_dict(), "hybrid_model_best.pth")
-            print(f"--> Saved model with improved Val Acc: {best_val_acc:.2f}%")
+            torch.save(model.state_dict(), CHECKPOINT_PATH)
+            print(f"--> Saved model with improved Val Acc: {best_val_acc:.2f}% to {CHECKPOINT_PATH}")
 
 
     # --- FINAL TEST EVALUATION ---
@@ -191,6 +191,12 @@ if __name__ == '__main__':
     model.eval()
     all_preds = []
     all_labels = []
+
+    try:
+        model.load_state_dict(torch.load(CHECKPOINT_PATH))
+        print(f"Loaded best weights from {CHECKPOINT_PATH}.")
+    except Exception as e:
+        print(f"Warning: Could not load best weights. Testing with final epoch weights. Error: {e}")
 
     with torch.no_grad():
         for imgs, labels in test_loader:
@@ -203,24 +209,13 @@ if __name__ == '__main__':
             all_preds.extend(preds)
             all_labels.extend(labels_np)
 
-    # Use classification_report for detailed metrics
     try:
-        class_names = get_class_names(DATA_DIR)
         print(classification_report(all_labels, all_preds, target_names=class_names))
     except Exception as e:
-        print(f"Could not print detailed report: {e}")
-        print(f"Final Test Accuracy: {classification_report(all_labels, all_preds, output_dict=True)['accuracy']:.4f}")
+        final_acc = classification_report(all_labels, all_preds, output_dict=True)['accuracy']
+        print(f"Could not print detailed report (likely due to missing class names): {e}")
+        print(f"Final Test Accuracy: {final_acc:.4f}")
         
-    # --- Save Model ---
-    torch.save(model.state_dict(), "hybrid_model_final.pth")
-    print(f"✅ Training complete. Final model saved to hybrid_model_final.pth!")
-=======
-            total_loss += loss.item()
-
-        print(f"Epoch {epoch+1}/{NUM_EPOCHS}: Loss = {total_loss/len(train_loader):.4f}")
-
-    # --- Save Model ---
-    MODEL_PATH = "hybrid_model.pth"
-    torch.save(model.state_dict(), MODEL_PATH)
-    print(f"✅ Model trained and saved to {MODEL_PATH}!")
->>>>>>> 049551bb1212d2b363f8ae263f6df3e07cef2aeb
+    # --- Save Final Model ---
+    torch.save(model.state_dict(), "efficientnet_b0_final.pth") 
+    print(f"✅ Training complete. Final model saved to efficientnet_b0_final.pth!")
