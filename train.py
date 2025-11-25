@@ -16,7 +16,7 @@ from utils.dataset_loader import PlantDataset, get_class_names
 MODEL_NAME = 'efficientnet_b0' 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DATA_DIR = "data/PlantVillage"
-NUM_EPOCHS = 50 
+NUM_EPOCHS = 80
 BATCH_SIZE = 16
 INITIAL_LR = 1e-6 
 TRAIN_RATIO = 0.8

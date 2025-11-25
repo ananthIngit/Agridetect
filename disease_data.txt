@@ -1,0 +1,257 @@
+Disease Name: Citrus Black spot
+Pathogen Type: Fungus (Phyllosticta citricarpa)
+Symptoms:
+- **Hard Spot:** Small, dark, slightly raised spots (pinheads) appear on ripening fruit, often surrounded by a dark red to black ring.
+- **Freckle Spot:** Tiny, red, slightly sunken spots that can resemble freckles, found on fruit.
+- **False Melanose:** Irregular, raised, dark spots on leaves and green fruit.
+- **Leaf Drop:** Severe infection can lead to premature leaf drop.
+
+Treatment & Management:
+- **Immediate Action:** Remove and destroy infected fallen fruit and leaves, as the pathogen overwinters in debris.
+- **Chemical Control:** Apply fungicides containing **Copper** (Copper Oxychloride or Copper Hydroxide) during the susceptible period (petal fall until fruit is 4 months old).
+- **Pruning:** Prune heavily infested branches and dead wood to increase air flow.
+
+Prevention & Cultural Practices:
+- **Sanitation:** Rake up debris religiously throughout the year.
+- **Exclusion:** Use windbreaks to prevent the spread of spores.
+
+---
+
+Disease Name: Citrus canker
+Pathogen Type: Bacteria (Xanthomonas citri subsp. citri)
+Symptoms:
+- **Lesions:** Raised, tan to brown lesions with water-soaked margins and a distinct yellow halo appear on leaves, stems, and fruit.
+- **Texture:** Lesions become rough, corky, and crater-like over time.
+- **Fruit Drop:** Premature drop of fruit.
+
+Treatment & Management:
+- **Immediate Action:** This is a highly contagious, regulated disease. Infected trees must often be removed and destroyed (incinerated) based on local regulations.
+- **Chemical Control:** **Copper spray** applications can suppress the disease, but cannot cure it. Apply frequently during new flush periods.
+- **Pruning:** Remove and destroy all infected branches immediately, disinfecting tools (with 10% bleach) after every cut.
+
+Prevention & Cultural Practices:
+- **Windbreaks:** Use windbreaks to reduce wind damage, as wounds are primary entry points for the bacteria.
+- **Resistant Varieties:** Plant tolerant or resistant citrus varieties if available.
+
+---
+
+Disease Name: Citrus greening
+Pathogen Type: Bacteria (Candidatus Liberibacter asiaticus)
+Symptoms:
+- **Mottling:** Asymmetrical, blotchy yellow mottling (chlorosis) on leaves that does not cross the central vein cleanly. This is the hallmark symptom.
+- **Vein Swelling:** Yellow veins and thickened, enlarged midribs.
+- **Fruit:** Small, lopsided, poorly colored fruit that remains green on the bottom end, often with aborted seeds.
+- **Taste:** Fruit juice is often bitter and salty.
+
+Treatment & Management:
+- **Immediate Action:** Control the **Asian Citrus Psyllid (ACP)**, the insect vector that transmits the disease, using systemic insecticides.
+- **Removal:** Remove and destroy infected trees or branches immediately to prevent spread, as there is currently **no effective cure**.
+- **Nutrients:** Provide supplemental micronutrients (Zinc, Manganese, Iron) to help mitigate symptom severity, but this does not cure the disease.
+
+Prevention & Cultural Practices:
+- **Psyllid Control:** Maintain a rigorous insecticide program to keep the ACP population low.
+- **Monitoring:** Regularly scout for ACP and early leaf symptoms.
+
+---
+
+Disease Name: Citrus Healthy
+Pathogen Type: N/A (Healthy Plant)
+Description:
+- **Appearance:** Leaves are uniformly deep green, glossy, and symmetrical. New growth flushes are vigorous. Fruit is well-shaped, appropriately sized, and colors uniformly upon ripening.
+- **Best Practices:** Maintain a consistent fertilization schedule with balanced macro- and micro-nutrients. Ensure consistent moisture and appropriate pruning for canopy management.
+- **Next Steps:** Regular scouting for pests (Psyllids, Scale) and diseases is recommended to maintain optimal health.
+
+---
+
+Disease Name: Corn Common rust
+Pathogen Type: Fungus (Puccinia sorghi)
+Symptoms:
+- **Pustules:** Small, cinnamon-brown, powdery pustules (blisters) appear on both upper and lower leaf surfaces. These pustules contain spores and can be rubbed off onto fingers.
+- **Color Change:** As the infection progresses, pustules turn dark brown to black.
+- **Damage:** Severe infection causes leaves to yellow, die prematurely, and reduces grain filling, leading to yield loss.
+
+Treatment & Management:
+- **Fungicides:** Apply a foliar fungicide (e.g., containing **azoxystrobin** or **propiconazole**) as soon as rust is detected, particularly on high-value corn or seed corn.
+- **Timing:** Fungicides are most effective if applied before the rust becomes widespread (usually during the VT-R3 growth stages).
+
+Prevention & Cultural Practices:
+- **Resistant Hybrids:** Plant corn hybrids labeled as resistant or tolerant to common rust.
+- **Planting Date:** Planting early can help the crop mature before the rust spores build up later in the season.
+
+---
+
+Disease Name: Corn Gray leaf spot
+Pathogen Type: Fungus (Cercospora zeae-maydis)
+Symptoms:
+- **Lesions:** Long, narrow, rectangular, pale-tan to gray spots that are restricted by the leaf veins. Lesions are typically 1 to 2 inches long.
+- **Location:** Spots often appear first on the lower leaves and progress upwards.
+- **Damage:** Heavy spotting causes leaves to die, leading to a gray or scorched appearance of the field.
+
+Treatment & Management:
+- **Fungicides:** Apply fungicides containing **strobilurins** or **triazoles** if the disease appears early and conditions are favorable for spread.
+- **Residue Management:** Plowing under infected residue can significantly reduce the amount of pathogen available for the next season.
+
+Prevention & Cultural Practices:
+- **Crop Rotation:** Rotate corn with non-host crops (like soybeans) for at least two years.
+- **Resistant Hybrids:** Use resistant or tolerant corn hybrids.
+- **Tillage:** Use tillage practices that bury corn residue.
+
+---
+
+Disease Name: Corn Healthy
+Pathogen Type: N/A (Healthy Plant)
+Description:
+- **Appearance:** Leaves are deep green, upright, and free of any lesions or discolorations. Stems are strong, and the overall plant growth is vigorous and uniform. The tassel and ear development are normal.
+- **Best Practices:** Ensure adequate nutrient supply (especially nitrogen) and consistent moisture. Use proper plant spacing and monitor soil health.
+- **Next Steps:** Maintain regular scouting for pests (corn borer, earworm) and environmental stress.
+
+---
+
+Disease Name: Corn Northern Leaf Blight
+Pathogen Type: Fungus (Exserohilum turcicum)
+Symptoms:
+- **Lesions:** Large, cigar-shaped, grayish-green to tan lesions that can grow up to 6 inches long.
+- **Appearance:** Lesions appear first on the lower leaves and progress to the upper leaves, resembling cigar butts.
+- **Damage:** Causes rapid leaf necrosis (death), especially during cool, moist weather, severely limiting photosynthesis.
+
+Treatment & Management:
+- **Fungicides:** Apply a tank mix of triazole and strobilurin fungicides if the disease is identified early and environmental conditions favor the disease.
+
+Prevention & Cultural Practices:
+- **Resistant Hybrids:** Plant hybrids labeled as resistant (e.g., those with *Ht* genes).
+- **Residue Management:** Rotate crops with a non-host crop and till or chop residue to speed decomposition.
+
+---
+
+Disease Name: Grape Black Measles
+Pathogen Type: Fungi (A complex of fungi, including Phaeoacremonium and Phaeomoniella spp.)
+Symptoms:
+- **"Measles" (Eutypa dieback):** On fruit, light brown spots develop into purplish-black spots, resembling measles. Fruit clusters may dry up or rot.
+- **Leaf/Shoot Symptoms:** Leaves show interveinal yellowing (chlorosis) or reddish-brown spotting. Shoots often appear stunted or weak.
+- **Wood Symptoms:** Internal wood symptoms include dark spotting or streaking in the trunk and cordons.
+
+Treatment & Management:
+- **Pruning:** Remove and destroy infected wood, cutting back to healthy tissue.
+- **Protection:** Treat large pruning wounds immediately with a wound protectant or fungicide paste to prevent re-infection.
+- **Nutrients:** Ensure balanced nutrition to help vines tolerate infection.
+
+Prevention & Cultural Practices:
+- **Avoid Pruning in Rain:** Avoid pruning vines during periods of rain or high humidity when spores are active.
+- **Sanitation:** Dispose of pruned wood away from the vineyard.
+
+---
+
+Disease Name: Grape Black rot
+Pathogen Type: Fungus (Guignardia bidwellii)
+Symptoms:
+- **Leaf Spots:** Small, circular, reddish-brown to black spots appear on the leaves.
+- **Fruit:** Berries turn black and shrivel into hard, black, wrinkled mummies (shriveled raisins).
+- **Shoot Cankers:** Elongated black lesions or cankers on the shoots.
+
+Treatment & Management:
+- **Fungicides:** Apply fungicides (e.g., mancozeb, myclobutanil) starting at bud break and continuing through bloom and fruit set.
+- **Removal:** Remove and destroy all mummified berries hanging on the vine or lying on the ground, as they are a major source of infection.
+
+Prevention & Cultural Practices:
+- **Sanitation:** Bury or remove mummified berries and debris before the growing season starts.
+- **Airflow:** Prune vines to improve air circulation and sunlight penetration.
+
+---
+
+Disease Name: Grape Healthy
+Pathogen Type: N/A (Healthy Plant)
+Description:
+- **Appearance:** Shoots are strong, leaves are uniformly green and free of spots or lesions. Fruit clusters are dense and developing normally with firm, evenly sized berries.
+- **Best Practices:** Proper canopy management (leaf pulling and shoot positioning) is crucial for airflow and sunlight exposure. Maintain consistent moisture.
+- **Next Steps:** Monitor for common regional pests (e.g., grape berry moth) and ensure scheduled irrigation and fertilization are followed.
+
+---
+
+Disease Name: Grape Isariopsis Leaf Spot
+Pathogen Type: Fungus (Isariopsis clavispora)
+Symptoms:
+- **Leaf Spots:** Irregular, yellowish spots appear on the upper leaf surface.
+- **Fruiting:** On the underside of the leaves, dark, velvety tufts of fungal growth (spores) are visible in the corresponding spots.
+- **Damage:** Severe defoliation can occur late in the season, weakening the vine.
+
+Treatment & Management:
+- **Fungicides:** Use fungicides targeting leaf spot diseases (often the same ones used for Black Rot, like Mancozeb).
+- **Timing:** Fungicides are generally applied early in the season to protect new growth.
+
+Prevention & Cultural Practices:
+- **Sanitation:** Remove infected leaves and debris in the autumn.
+- **Airflow:** Ensure good air circulation through proper pruning and trellising.
+
+---
+
+Disease Name: Potato Early blight
+Pathogen Type: Fungus (Alternaria solani)
+Symptoms:
+- **Leaf Spots:** Dark brown to black spots with concentric rings, giving a distinctive **bullseye** or **target-spot** appearance. These appear first on older, lower leaves.
+- **Necrosis:** Leaves around the spots turn yellow and die prematurely (necrosis).
+- **Tubers:** Dark, slightly sunken lesions with purple margins can appear on the tubers.
+
+Treatment & Management:
+- **Chemical Control:** Apply fungicides containing **chlorothalonil** or **mancozeb**. Start spraying when symptoms first appear and repeat on a regular schedule.
+- **Hilling:** Ensure deep hilling to prevent spores from washing down and infecting tubers.
+
+Prevention & Cultural Practices:
+- **Crop Rotation:** Rotate potatoes with non-host crops for at least two years.
+- **Residue:** Plow under or remove all crop residue immediately after harvest.
+- **Watering:** Avoid overhead irrigation late in the day or during humid periods.
+
+---
+
+Disease Name: Potato Healthy
+Pathogen Type: N/A (Healthy Plant)
+Description:
+- **Appearance:** Foliage is lush, dark green, and shows uniform growth. Leaves are free of spots, discoloration, or wilt. Stems are thick and upright.
+- **Best Practices:** Maintain adequate and consistent soil moisture, especially during tuber set and bulking. Monitor soil fertility and pH.
+- **Next Steps:** Ensure proper hilling to protect developing tubers from light and pests.
+
+---
+
+Disease Name: Potato Late blight
+Pathogen Type: Oomycete/Water Mold (Phytophthora infestans)
+Symptoms:
+- **Lesions:** Irregularly shaped, dark green to black, water-soaked spots on leaves and stems.
+- **Fuzzy Growth:** During cool, humid periods, a **white, fuzzy fungal growth** (sporangia) can be seen on the underside of the lesions.
+- **Odor:** Infected fields may emit a strong, foul odor.
+- **Tubers:** Irregular, reddish-brown, dry, corky rot beneath the skin.
+
+Treatment & Management:
+- **Chemical Control (Urgent):** Requires immediate and aggressive application of highly effective fungicides (e.g., those containing **mefenoxam** or **propamocarb**). Preventive sprays are highly recommended in susceptible areas.
+- **Removal:** Immediately destroy infected foliage by burning or burying to prevent spore spread.
+
+Prevention & Cultural Practices:
+- **"Seed" Control:** Plant only certified, disease-free seed potatoes.
+- **Cull Pile:** Eliminate all cull piles (discarded potatoes) and volunteer potatoes, as they are primary sources of early infection.
+
+---
+
+Disease Name: Tomato Early_blight
+Pathogen Type: Fungus (Alternaria solani)
+Symptoms:
+- **Leaf Spots:** Dark brown to black spots (1/4 inch diameter) often develop with concentric rings, giving a distinctive "bullseye" or **target-spot** appearance. They typically appear first on the older, lower leaves.
+- **Defoliation:** Heavily infected leaves turn yellow and drop prematurely.
+- **Stem/Fruit:** Small, dark, sunken lesions may appear on the stems or near the stem end of the fruit.
+
+Treatment & Management:
+- **Chemical Control:** Apply fungicides containing **chlorothalonil** or **copper-based products**. Start applications immediately when symptoms first appear.
+- **Removal:** Immediately remove and destroy infected lower leaves and plant debris to reduce fungal spores.
+
+Prevention & Cultural Practices:
+- **Crop Rotation:** Do not plant tomatoes or potatoes in the same spot for 3 years.
+- **Watering:** Water at the base of the plant using drip irrigation; avoid overhead watering.
+- **Air Circulation:** Stake plants to keep foliage off the ground.
+
+---
+
+Disease Name: Tomato Healthy
+Pathogen Type: N/A (Healthy Plant)
+Description:
+- **Appearance:** Leaves are deep green, flat, and uniform. Stems are robust, and the overall plant is vigorous. Flowers and fruit set are proceeding normally.
+- **Best Practices:** Provide a balanced fertilizer, adequate water, and strong support structures (stakes or cages) for the heavy fruit.
+- **Next Steps:** Maintain pruning to manage canopy density and prevent foliage from touching the soil.
+
+---

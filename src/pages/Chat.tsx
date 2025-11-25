@@ -2,21 +2,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Send, Bot, User, CornerUpLeft, Loader2 } from "lucide-react";
 
 // Placeholder type declarations for external components (assuming basic props)
-interface NavLinkProps {
-    to: string;
-    className: string;
-    children: React.ReactNode;
-}
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    className?: string;
-    variant?: string;
-    size?: string;
-    children: React.ReactNode;
-}
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-    className?: string;
-    children: React.ReactNode;
-}
+interface NavLinkProps { to: string; className: string; children: React.ReactNode; }
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { className?: string; variant?: string; size?: string; children: React.ReactNode; }
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> { className?: string; children: React.ReactNode; }
 // Placeholder for external components/hooks (must be included for single-file compilation)
 const Button: React.FC<ButtonProps> = (props) => <button {...props} className={"p-3 rounded-lg " + props.className}>{props.children}</button>;
 const Card: React.FC<CardProps> = (props) => <div {...props} className={"bg-white p-4 rounded-xl shadow-lg " + props.className}>{props.children}</div>;
@@ -30,10 +18,8 @@ interface Message {
 // -----------------------------
 
 // --- Configuration ---
-// NOTE: API KEY IS HARDCODED FOR TESTING. REPLACE WITH YOUR ACTUAL KEY.
-const GEMINI_API_KEY = "AIzaSyDXJN8egEzTG2WHS0HWq2SsQIkBTj6fg4k"; 
-const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
+// NEW: Define Local API URL
+const LOCAL_API_URL = "http://localhost:5000/api/chat";
 // ---------------------
 
 // Simplified way to get URL parameters in a single-file React context
@@ -43,7 +29,8 @@ const useQuery = (): URLSearchParams => {
 
 const Chat: React.FC = () => {
     const query = useQuery();
-    const initialDisease: string | null = query.get("disease")?.replace(/-/g, ' ') || null;
+    // Replaces hyphens for display
+    const initialDisease: string | null = query.get("disease")?.replace(/-/g, ' ') || null; 
     
     const [inputMessage, setInputMessage] = useState<string>("");
     const [messages, setMessages] = useState<Message[]>([]);
@@ -55,86 +42,77 @@ const Chat: React.FC = () => {
     };
     useEffect(scrollToBottom, [messages]);
 
-    const systemInstruction: string = `You are AgriBot, an expert agricultural assistant specializing in plant disease diagnosis and treatment. Your tone should be encouraging, knowledgeable, and professional. Provide concise, actionable advice.`;
-
+    // Initial message is now a friendly greeting from the local bot
     useEffect(() => {
         if (initialDisease && messages.length === 0) {
             setMessages([
                 { 
                     role: 'bot', 
-                    content: `Welcome! I'm AgriBot. I see you're dealing with **${initialDisease}**. Before we begin, are your crops high-yield or organic, so I can tailor the best treatment advice?` 
+                    content: `Hello! I see the detection found **${initialDisease}**. I'm here to help with treatment, symptoms, and prevention advice. What's your next step for your crop?` 
                 }
             ]);
         } else if (!initialDisease && messages.length === 0) {
              setMessages([
                 { 
                     role: 'bot', 
-                    content: `Welcome! I'm AgriBot. I can help you with plant health, diagnosis, and treatment. Ask me anything about your crops!` 
+                    content: `Welcome! I'm AgriBot, your local expert assistant. Ask me anything about plant diseases, farming, or just say hello—I'm happy to chat!` 
                 }
             ]);
         }
     }, [initialDisease]);
 
-    // Function to handle API call with retries
-    const generateContentWithRetry = useCallback(async (payload: any): Promise<string> => {
-        const MAX_RETRIES = 5;
-        const INITIAL_DELAY = 1000; // 1 second
-        
-        for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "I apologize, I could not generate a response at this time.";
-                } else if (response.status === 429 && attempt < MAX_RETRIES - 1) {
-                    const delay = INITIAL_DELAY * (2 ** attempt);
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                } else {
-                    const errorBody = await response.json();
-                    throw new Error(`API Error ${response.status}: ${JSON.stringify(errorBody)}`);
-                }
-            } catch (error) {
-                if (attempt === MAX_RETRIES - 1) {
-                    throw new Error(`Failed to communicate with LLM after ${MAX_RETRIES} attempts. ${error instanceof Error ? error.message : "Unknown error"}`);
-                }
-                const delay = INITIAL_DELAY * (2 ** attempt);
-                await new Promise(resolve => setTimeout(resolve, delay));
+    // --- REWRITTEN: Function to call your local Flask RAG API ---
+    const generateContentWithRetry = useCallback(async (text: string, diseaseContext: string | null): Promise<string> => {
+        const payload = {
+            message: text,
+            disease_context: diseaseContext // Pass context for the first message
+        };
+        
+        try {
+            const response = await fetch(LOCAL_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
             }
+
+            const data = await response.json();
+            
+            if (data.success && data.response) {
+                return data.response; // Return the AI text response
+            } else {
+                throw new Error(data.error || "Local AI Assistant failed to generate content.");
+            }
+
+        } catch (error) {
+            console.error("Local API Error:", error);
+            throw new Error(`Failed to communicate with local AI assistant. ${error instanceof Error ? error.message : "Unknown error"}`);
         }
-        return "Failed to communicate with the LLM.";
     }, []);
+    // --- END REWRITTEN FUNCTION ---
+
 
     const sendMessage = useCallback(async (text: string) => {
         if (!text.trim() || isLoading) return;
 
         const userMessage: Message = { role: 'user', content: text };
+        
+        // Pass the disease context ONLY if this is the user's first real question after detection
+        const currentDiseaseContext = (messages.length === 1 && initialDisease) ? initialDisease : null;
+
+
         setMessages(prev => [...prev, userMessage]);
         setInputMessage("");
         setIsLoading(true);
 
-        const chatHistory = messages.map(msg => ({ 
-            role: msg.role === 'bot' ? 'model' : 'user', 
-            parts: [{ text: msg.content.replace(/\*\*/g, '') }] 
-        }));
-        
-        chatHistory.push({ role: 'user', parts: [{ text }] });
-
-        const payload = {
-            contents: chatHistory,
-            systemInstruction: {
-                parts: [{ text: systemInstruction }]
-            },
-            // CRITICAL FIX: Adding Google Search Tool for connection stability
-            tools: [{ "google_search": {} }],
-        };
-
         try {
-            const botText = await generateContentWithRetry(payload);
+            // Pass the user message AND the disease context (if applicable) to the local API
+            const botText = await generateContentWithRetry(text, currentDiseaseContext); 
 
             const botResponse: Message = {
                 role: 'bot',
@@ -143,16 +121,16 @@ const Chat: React.FC = () => {
             setMessages(prev => [...prev, botResponse]);
 
         } catch (error) {
-            console.error("Gemini API Error:", error);
+            console.error("AI Assistant Error:", error);
             const errorMessage: Message = { 
                 role: 'bot', 
-                content: "Sorry, I am having trouble connecting to the AI assistant right now. Please check your network or try refreshing the page." 
+                content: `Sorry, I am having trouble connecting to the local AI assistant right now. Error: ${error.message}. Please ensure the Flask server and Ollama are running.` 
             };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
         }
-    }, [isLoading, messages, generateContentWithRetry]);
+    }, [isLoading, messages, generateContentWithRetry, initialDisease]);
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && !isLoading) {
@@ -178,7 +156,7 @@ const Chat: React.FC = () => {
             <main className="container mx-auto px-4 py-12">
                 <div className="max-w-4xl mx-auto space-y-8">
                     <div className="flex items-center space-x-4 mb-8">
-                        <NavLink to="/detection" className=""> {/* FIX: Added missing className */}
+                        <NavLink to="/detection" className="">
                             <Button variant="outline" className="text-muted-foreground hover:bg-muted/70">
                                 <CornerUpLeft className="w-4 h-4 mr-2" /> Back to Detection
                             </Button>
